@@ -1,0 +1,19 @@
+services:
+  postgres:
+    image: postgres
+    environment:
+      POSTGRES_DB: TreeViewBotDatabase
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+    ports:
+      - "5432:5432"
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: treeviewbot:latest
+    depends_on:
+      - postgres
+    environment:
+      - TELEGRAM_BOT_API_KEY=${TELEGRAM_BOT_API_KEY}
