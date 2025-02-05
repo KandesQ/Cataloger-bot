@@ -2,14 +2,12 @@ package com.example.TreeViewBot.command;
 
 import com.example.TreeViewBot.entity.Element;
 import com.example.TreeViewBot.repository.ElementRepository;
-import com.example.TreeViewBot.service.SendBotMessageService;
-import org.springframework.context.annotation.Lazy;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -17,20 +15,15 @@ import java.util.List;
 /**
  * Показывает дерево эл-тов
  */
+@RequiredArgsConstructor
 @Component
 public class ViewTreeCommand implements Command {
 
-    private final SendBotMessageService sendBotMessageService;
     private final ElementRepository elementRepository;
-
-    public ViewTreeCommand(@Lazy SendBotMessageService sendBotMessageService, ElementRepository elementRepository) {
-        this.elementRepository = elementRepository;
-        this.sendBotMessageService = sendBotMessageService;
-    }
 
     @Transactional
     @Override
-    public void execute(Update update) {
+    public String execute(Update update) {
         String message;
 
         if (elementRepository.findByParentElementIsNull().isEmpty()) {
@@ -38,7 +31,8 @@ public class ViewTreeCommand implements Command {
         } else {
             message = getFormatTree();
         }
-        sendBotMessageService.sendMessage(update.getMessage().getChatId(), message);
+
+        return message;
     }
 
     private String getFormatTree() {
@@ -68,5 +62,15 @@ public class ViewTreeCommand implements Command {
     @Override
     public CommandName getType() {
         return CommandName.VIEW_TREE;
+    }
+
+    @Override
+    public boolean isOnlyArgsCommand() {
+        return false;
+    }
+
+    @Override
+    public boolean hasArgs() {
+        return false;
     }
 }

@@ -1,11 +1,7 @@
 package com.example.TreeViewBot.command;
 
-import com.example.TreeViewBot.service.SendBotMessageService;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Update;
-
-import javax.ws.rs.sse.Sse;
 
 /**
  * Неизвестная команда {@link Command}.
@@ -13,22 +9,26 @@ import javax.ws.rs.sse.Sse;
 @Component
 public class UnkownCommand implements Command {
 
-    private final SendBotMessageService sendBotMessageService;
-
-    private final String UNKNOWN_COMMAND_MESSAGE = "К сожалению, я не поддерживаю данную команду\n\n" +
-            "Чтобы узнать список поддерживаемых команд, напишите /help";
-
-    public UnkownCommand(@Lazy SendBotMessageService sendBotMessageService) {
-        this.sendBotMessageService = sendBotMessageService;
-    }
+    private final String UNKNOWN_COMMAND_MESSAGE = String.format("К сожалению, я не поддерживаю данную команду" +
+            Command.HELP_TEXT);
 
     @Override
-    public void execute(Update update) {
-        sendBotMessageService.sendMessage(update.getMessage().getChatId(), UNKNOWN_COMMAND_MESSAGE);
+    public String execute(Update update) {
+        return UNKNOWN_COMMAND_MESSAGE;
     }
 
     @Override
     public CommandName getType() {
         return CommandName.UNKNOWN_COMMAND;
+    }
+
+    @Override
+    public boolean isOnlyArgsCommand() {
+        return false;
+    }
+
+    @Override
+    public boolean hasArgs() {
+        return false;
     }
 }
