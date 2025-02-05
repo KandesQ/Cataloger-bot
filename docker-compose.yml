@@ -15,5 +15,5 @@ services:
     image: treeviewbot:latest
     depends_on:
       - postgres
-    environment:
-      - TELEGRAM_BOT_API_KEY=${TELEGRAM_BOT_API_KEY}
+#    environment:
+#      - TELEGRAM_BOT_API_KEY=YOUR_API_KEY

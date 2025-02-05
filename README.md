@@ -1,10 +1,10 @@
 
 Стек: Java 17, JPA/Hibernate, Docker, Docker Compose, Spring/Spring Boot 2, pattern Command, TelegramBots, Javadoc, IntelliJ IDEA,
-LogBack, Lombok, Git/GitHub
+LogBack, Lombok, Git/GitHub, PostgreSQL
 
 Для работы приложения нужен [Docker](https://www.docker.comhttps://www.docker.com):
 
-1. В рабочей IDE задайте переменную окружения TELEGRAM_BOT_API_KEY и присвойте ей значение вашего API key
+1. В docker-compose раскоментируйте поле environment и подставьте API ключ бота вместо YOUR_API_KEY 
 2. Запустите Docker Desktop (или Docker Engine)
 3. Запустите в терминале команду:  
 ```bash
