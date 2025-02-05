@@ -1,17 +1,13 @@
 package com.example.TreeViewBot.command;
 
 
-import com.example.TreeViewBot.service.SendBotMessageService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static com.example.TreeViewBot.command.CommandName.*;
 
 /**
  * Контейнер, содержащий {@link Command}'ы, которые используются для обработки сообщений пользователя.

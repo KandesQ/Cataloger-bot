@@ -15,7 +15,8 @@ public enum CommandName {
     ADD_ELEMENT("/addelement"),
     DELETE_ELEMENT("/deleteelement"),
     NO_COMMAND("/no"),
-    UNKNOWN_COMMAND("/unknown");
+    UNKNOWN_COMMAND("/unknown"),
+    WRONG_ARGS("/wrongargs");
 
     private final String commandName;
 

@@ -2,10 +2,9 @@ package com.example.TreeViewBot.command;
 
 import com.example.TreeViewBot.entity.Element;
 import com.example.TreeViewBot.repository.ElementRepository;
-import com.example.TreeViewBot.service.SendBotMessageService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -21,21 +20,16 @@ import java.util.Optional;
  *      <li>добавление элемента к существующему родителю</li>
  *  </ol>
  */
+@RequiredArgsConstructor
 @Slf4j
 @Component
 public class AddElementCommand implements Command {
 
-    private final SendBotMessageService sendBotMessageService;
     private final ElementRepository elementRepository;
-
-    public AddElementCommand(@Lazy SendBotMessageService sendBotMessageService, ElementRepository elementRepository) {
-        this.sendBotMessageService = sendBotMessageService;
-        this.elementRepository = elementRepository;
-    }
 
     @Transactional // чтобы избежать LazyInitializationException, все будет в рамках одной транзакции
     @Override
-    public void execute(Update update, String[] args) {
+    public String execute(Update update, String[] args) {
         String message;
         switch (args.length) {
             case 1:
@@ -49,7 +43,7 @@ public class AddElementCommand implements Command {
                 log.warn(message);
         }
 
-        sendBotMessageService.sendMessage(update.getMessage().getChatId(), message);
+        return message;
     }
 
     /**
@@ -100,5 +94,15 @@ public class AddElementCommand implements Command {
     @Override
     public CommandName getType() {
         return CommandName.ADD_ELEMENT;
+    }
+
+    @Override
+    public boolean isOnlyArgsCommand() {
+        return true;
+    }
+
+    @Override
+    public boolean hasArgs() {
+        return true;
     }
 }
