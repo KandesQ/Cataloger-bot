@@ -45,81 +45,78 @@ public class TreeViewBot extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
-        if (update.hasMessage() && update.getMessage().hasText()) {
-            String message = update.getMessage().getText().trim();
+        if (!update.hasMessage() || !update.getMessage().hasText()) return;
 
-            if (message.startsWith(COMMAND_PREF)) {
-                // убираю лишние пробелы между частями
-                String[] parts = Arrays.stream(message.split(" "))
-                        .filter(part -> !part.isEmpty())
-                        .toArray(String[]::new);
-                // вычленяем команду (в сообщении также могут быть аргументы)
-                String commandName = parts[0];
+        String message = update.getMessage().getText().trim();
 
-                String[] args = Arrays.copyOfRange(parts, 1, parts.length); // но без первого (команды)
+        if (!message.startsWith(COMMAND_PREF)) processMessage(NO_COMMAND.getCommandName(), update, null);
 
-                processMessage(commandName, update, args);
+        // убираю лишние пробелы между частями
+        String[] parts = Arrays.stream(message.split(" "))
+                .filter(part -> !part.isEmpty())
+                .toArray(String[]::new);
+        // вычленяем команду (в сообщении также могут быть аргументы)
+        String commandName = parts[0];
 
-            } else {
-                processMessage(NO_COMMAND.getCommandName(), update, null);
-            }
-        }
+        String[] args = Arrays.copyOfRange(parts, 1, parts.length); // но без первого (команды)
+
+        processMessage(commandName, update, args);
     }
 
-    @EventListener({ContextRefreshedEvent.class})
-    public void init() throws TelegramApiException {
-        TelegramBotsApi telegramBotsApi = new TelegramBotsApi(DefaultBotSession.class);
+        @EventListener({ContextRefreshedEvent.class})
+        public void init () throws TelegramApiException {
+            TelegramBotsApi telegramBotsApi = new TelegramBotsApi(DefaultBotSession.class);
 
-        try {
-            telegramBotsApi.registerBot(this);
-        } catch (TelegramApiException e) {
-            log.error("Не удалось зарегистрировать бота {}: {}", this.getBotUsername(), e.getMessage());
+            try {
+                telegramBotsApi.registerBot(this);
+            } catch (TelegramApiException e) {
+                log.error("Не удалось зарегистрировать бота {}: {}", this.getBotUsername(), e.getMessage());
+            }
         }
-    }
 
 
-    /**
-     * Обрабатывает команды и отправляет ответ юзеру в чат.
-     *
-     * @param commandName - имя команды
-     * @param update      - вся инфа про чат/пользователя
-     * @param args        - аргументы, переданные пользователем
-     */
-    private void processMessage(String commandName, Update update, @Nullable String[] args) {
-        SendMessage sendMessage = new SendMessage();
-        sendMessage.setChatId(update.getMessage().getChatId());
+        /**
+         * Обрабатывает команды и отправляет ответ юзеру в чат.
+         *
+         * @param commandName - имя команды
+         * @param update      - вся инфа про чат/пользователя
+         * @param args        - аргументы, переданные пользователем
+         */
+        private void processMessage (String commandName, Update update, @Nullable String[]args){
+            SendMessage sendMessage = new SendMessage();
+            sendMessage.setChatId(update.getMessage().getChatId());
 
-        try {
-            if (args == null) {
-                sendMessage.setText(commandService.getCommand(commandName).execute(update));
-                this.execute(sendMessage);
-                return;
-            }
-
-            if (args.length == 0 && commandService.getCommand(commandName).isOnlyArgsCommand()) {
-                sendMessage.setText(String.format("Вы передали неправильное количество аргуметов." + Command.HELP_TEXT));
-                this.execute(sendMessage);
-                return;
-            }
-
-            switch (args.length) {
-                case 0:
+            try {
+                if (args == null) {
                     sendMessage.setText(commandService.getCommand(commandName).execute(update));
-                    break;
-                case 1, 2:
-                    sendMessage.setText(commandService.getCommand(commandName).execute(update, args));
-                    break;
-                default:
-                    log.info("Пользователь передал неверное кол-во аргументов: {}", args.length);
+                    this.execute(sendMessage);
+                    return;
+                }
+
+                if (args.length == 0 && commandService.getCommand(commandName).isOnlyArgsCommand()) {
                     sendMessage.setText(String.format("Вы передали неправильное количество аргуметов." + Command.HELP_TEXT));
                     this.execute(sendMessage);
+                    return;
+                }
+
+                switch (args.length) {
+                    case 0:
+                        sendMessage.setText(commandService.getCommand(commandName).execute(update));
+                        break;
+                    case 1, 2:
+                        sendMessage.setText(commandService.getCommand(commandName).execute(update, args));
+                        break;
+                    default:
+                        log.info("Пользователь передал неверное кол-во аргументов: {}", args.length);
+                        sendMessage.setText(String.format("Вы передали неправильное количество аргуметов." + Command.HELP_TEXT));
+                        this.execute(sendMessage);
+                }
+
+                this.execute(sendMessage);
+
+                log.info("Сообщение отправлено в чат {}", update.getMessage().getChatId());
+            } catch (TelegramApiException e) {
+                log.error("Не удалось отправить сообщение в чат с id {}: {}", update.getMessage().getChatId(), e.getMessage());
             }
-
-            this.execute(sendMessage);
-
-            log.info("Сообщение отправлено в чат {}", update.getMessage().getChatId());
-        } catch (TelegramApiException e) {
-            log.error("Не удалось отправить сообщение в чат с id {}: {}", update.getMessage().getChatId(), e.getMessage());
         }
     }
-}
