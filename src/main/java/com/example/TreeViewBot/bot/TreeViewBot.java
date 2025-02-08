@@ -1,5 +1,6 @@
 package com.example.TreeViewBot.bot;
 
+import com.example.TreeViewBot.command.Command;
 import com.example.TreeViewBot.command.CommandContainer;
 import com.example.TreeViewBot.command.CommandName;
 import com.example.TreeViewBot.config.BotConfig;
@@ -98,7 +99,7 @@ public class TreeViewBot extends TelegramLongPollingBot {
             }
 
             if (args.length == 0 && commandContainer.getCommand(commandName).isOnlyArgsCommand()) {
-                sendMessage.setText(commandContainer.getCommand(WRONG_ARGS.getCommandName()).execute(update));
+                sendMessage.setText(String.format("Вы передали неправильное количество аргуметов." + Command.HELP_TEXT));
                 this.execute(sendMessage);
                 return;
             }
@@ -112,7 +113,8 @@ public class TreeViewBot extends TelegramLongPollingBot {
                     break;
                 default:
                     log.info("Пользователь передал неверное кол-во аргументов: {}", args.length);
-                    sendMessage.setText(commandContainer.getCommand(CommandName.WRONG_ARGS.getCommandName()).execute(update, args));
+                    sendMessage.setText(String.format("Вы передали неправильное количество аргуметов." + Command.HELP_TEXT));
+                    this.execute(sendMessage);
             }
 
             this.execute(sendMessage);

@@ -29,12 +29,14 @@ public class DeleteElementCommand implements Command {
     @Override
     public String execute(Update update, String[] args) {
         String message;
+
+        // использую свич для гибкости, если захочу добавить реализацию с большим кол-вом аргументов
         switch (args.length) {
             case 1:
                 message = deleteElement(args[0]);
                 break;
             default:
-                message = "Кол-во аргументов превысило максимум (1)";
+                message = "Кол-во аргументов превысило максимум";
                 log.warn(message);
         }
 
