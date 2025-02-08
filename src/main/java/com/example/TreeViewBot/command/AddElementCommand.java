@@ -92,6 +92,12 @@ public class AddElementCommand implements Command {
     }
 
     @Override
+    public String getCommandInfo() {
+        return CommandName.ADD_ELEMENT.getCommandName() + " - <название элемента> - добавление корневого элемента в главный каталог\n" +
+                CommandName.ADD_ELEMENT.getCommandName() + " <родительский элемент> <дочерний элемент> - добавление дочернего элемента к родительскому";
+    }
+
+    @Override
     public CommandName getType() {
         return CommandName.ADD_ELEMENT;
     }

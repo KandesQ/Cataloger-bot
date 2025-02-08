@@ -33,7 +33,6 @@ public class TreeViewBot extends TelegramLongPollingBot {
     public final static String COMMAND_PREF = "/";
 
     private final CommandContainer commandContainer;
-    private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     @Override
     public String getBotUsername() {

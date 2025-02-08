@@ -20,6 +20,11 @@ public class StartCommand implements Command {
     }
 
     @Override
+    public String getCommandInfo() {
+        return CommandName.START.getCommandName() + " - краткая информация о боте";
+    }
+
+    @Override
     public CommandName getType() {
         return CommandName.START;
     }

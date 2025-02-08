@@ -1,5 +1,7 @@
 package com.example.TreeViewBot.command;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
@@ -11,25 +13,35 @@ import static com.example.TreeViewBot.command.CommandName.*;
 @Component
 public class HelpCommand implements Command {
 
-    private final String HELP_MESSAGE = String.format("Вот список команд:\n\n" +
-            "%s - информация о боте\n" +
-            "%s - получение всех команд бота\n" +
-            "%s - вывод форматированной структуры\n" +
-            "%s <название элемента> - добавление корневого элемента в главный каталог\n" +
-            "%s <родительский элемент> <дочерний элемент> - добавление дочернего элемента к родительскому\n" +
-            "%s <название элемента> - удаление элемента и его потомков",
-            START.getCommandName(), HELP.getCommandName(), VIEW_TREE.getCommandName(),
-            ADD_ELEMENT.getCommandName(), ADD_ELEMENT.getCommandName(), DELETE_ELEMENT.getCommandName());
+    private final ApplicationContext applicationContext;
+
+    public HelpCommand(ApplicationContext applicationContext) {
+        this.applicationContext = applicationContext;
+    }
 
     @Override
     public String execute(Update update) {
-        return HELP_MESSAGE;
+        StringBuilder message = new StringBuilder().append("Вот список команд:\n\n");
+
+        for (Command command : applicationContext.getBeansOfType(Command.class).values()) {
+            if (!command.getCommandInfo().isEmpty()) {
+                message.append(command.getCommandInfo()).append("\n");
+            }
+        }
+
+        return message.toString();
+    }
+
+    @Override
+    public String getCommandInfo() {
+        return HELP.getCommandName() + " - получение всех команд бота";
     }
 
     @Override
     public CommandName getType() {
         return CommandName.HELP;
     }
+
 
     @Override
     public boolean isOnlyArgsCommand() {

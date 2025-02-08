@@ -60,6 +60,11 @@ public class ViewTreeCommand implements Command {
     }
 
     @Override
+    public String getCommandInfo() {
+        return CommandName.VIEW_TREE.getCommandName() + " - вывод форматированной структуры";
+    }
+
+    @Override
     public CommandName getType() {
         return CommandName.VIEW_TREE;
     }

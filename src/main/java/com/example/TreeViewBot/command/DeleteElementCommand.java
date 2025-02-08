@@ -68,6 +68,11 @@ public class DeleteElementCommand implements Command {
     }
 
     @Override
+    public String getCommandInfo() {
+        return CommandName.DELETE_ELEMENT.getCommandName() + " <название элемента> - удаление элемента и его потомков";
+    }
+
+    @Override
     public CommandName getType() {
         return CommandName.DELETE_ELEMENT;
     }

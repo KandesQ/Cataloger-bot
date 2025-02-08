@@ -1,5 +1,6 @@
 package com.example.TreeViewBot.command;
 
+import com.example.TreeViewBot.bot.TreeViewBot;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -12,8 +13,8 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 @Component
 public class NoCommand implements Command {
 
-    private final String NO_COMMAND_MESSAGE = String.format("Извините, но я распознаю команды, начинающиеся строго со слэша (/)" +
-            Command.HELP_TEXT);
+    private final String NO_COMMAND_MESSAGE = String.format("Извините, но я распознаю команды, начинающиеся c %s" +
+            Command.HELP_TEXT, TreeViewBot.COMMAND_PREF);
 
     @Override
     public String execute(Update update) {

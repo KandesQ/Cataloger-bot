@@ -33,6 +33,7 @@ public interface Command {
      */
     CommandName getType();
 
+    default String getCommandInfo() {return "";}
 
     /**
      * Отвечает на вопрос вызывается ли команда только с аргументами
