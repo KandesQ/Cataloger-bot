@@ -1,4 +1,4 @@
-package com.example.TreeViewBot.command;
+package com.example.TreeViewBot.service;
 
 import lombok.Getter;
 

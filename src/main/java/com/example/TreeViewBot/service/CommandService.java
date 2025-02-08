@@ -1,6 +1,7 @@
-package com.example.TreeViewBot.command;
+package com.example.TreeViewBot.service;
 
 
+import com.example.TreeViewBot.service.commands.Command;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -14,12 +15,12 @@ import java.util.Map;
  */
 @Slf4j
 @Component
-public class CommandContainer {
+public class CommandService {
 
     private final Map<String, Command> commands = new HashMap<>();
 
     @Autowired
-    public CommandContainer(List<Command> commands) {
+    public CommandService(List<Command> commands) {
         /**
          * Чтобы при создании новой команды вручную не прописывать их экземпляры,
          * использую автоматическую "регистрацию" всех бинов, помеченных интерфейсом {@link Command}

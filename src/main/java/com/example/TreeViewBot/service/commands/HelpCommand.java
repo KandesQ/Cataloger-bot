@@ -1,11 +1,11 @@
-package com.example.TreeViewBot.command;
+package com.example.TreeViewBot.service.commands;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.TreeViewBot.service.CommandName;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-import static com.example.TreeViewBot.command.CommandName.*;
+import static com.example.TreeViewBot.service.CommandName.*;
 
 /**
  * Навигация (Help) {@link Command}

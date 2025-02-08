@@ -1,5 +1,6 @@
-package com.example.TreeViewBot.command;
+package com.example.TreeViewBot.service.commands;
 
+import com.example.TreeViewBot.service.CommandName;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 /**

@@ -1,15 +1,13 @@
 package com.example.TreeViewBot.bot;
 
-import com.example.TreeViewBot.command.Command;
-import com.example.TreeViewBot.command.CommandContainer;
-import com.example.TreeViewBot.command.CommandName;
+import com.example.TreeViewBot.service.commands.Command;
+import com.example.TreeViewBot.service.CommandService;
 import com.example.TreeViewBot.config.BotConfig;
 import lombok.RequiredArgsConstructor;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
@@ -21,7 +19,7 @@ import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 import javax.annotation.Nullable;
 import java.util.Arrays;
 
-import static com.example.TreeViewBot.command.CommandName.*;
+import static com.example.TreeViewBot.service.CommandName.*;
 
 
 @Slf4j
@@ -33,7 +31,7 @@ public class TreeViewBot extends TelegramLongPollingBot {
 
     public final static String COMMAND_PREF = "/";
 
-    private final CommandContainer commandContainer;
+    private final CommandService commandService;
 
     @Override
     public String getBotUsername() {
@@ -93,12 +91,12 @@ public class TreeViewBot extends TelegramLongPollingBot {
 
         try {
             if (args == null) {
-                sendMessage.setText(commandContainer.getCommand(commandName).execute(update));
+                sendMessage.setText(commandService.getCommand(commandName).execute(update));
                 this.execute(sendMessage);
                 return;
             }
 
-            if (args.length == 0 && commandContainer.getCommand(commandName).isOnlyArgsCommand()) {
+            if (args.length == 0 && commandService.getCommand(commandName).isOnlyArgsCommand()) {
                 sendMessage.setText(String.format("Вы передали неправильное количество аргуметов." + Command.HELP_TEXT));
                 this.execute(sendMessage);
                 return;
@@ -106,10 +104,10 @@ public class TreeViewBot extends TelegramLongPollingBot {
 
             switch (args.length) {
                 case 0:
-                    sendMessage.setText(commandContainer.getCommand(commandName).execute(update));
+                    sendMessage.setText(commandService.getCommand(commandName).execute(update));
                     break;
                 case 1, 2:
-                    sendMessage.setText(commandContainer.getCommand(commandName).execute(update, args));
+                    sendMessage.setText(commandService.getCommand(commandName).execute(update, args));
                     break;
                 default:
                     log.info("Пользователь передал неверное кол-во аргументов: {}", args.length);

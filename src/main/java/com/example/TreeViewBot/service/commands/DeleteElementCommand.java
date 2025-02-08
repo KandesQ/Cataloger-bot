@@ -1,7 +1,8 @@
-package com.example.TreeViewBot.command;
+package com.example.TreeViewBot.service.commands;
 
 import com.example.TreeViewBot.entity.Element;
 import com.example.TreeViewBot.repository.ElementRepository;
+import com.example.TreeViewBot.service.CommandName;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

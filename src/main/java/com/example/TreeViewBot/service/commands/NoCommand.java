@@ -1,6 +1,7 @@
-package com.example.TreeViewBot.command;
+package com.example.TreeViewBot.service.commands;
 
 import com.example.TreeViewBot.bot.TreeViewBot;
+import com.example.TreeViewBot.service.CommandName;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Update;
